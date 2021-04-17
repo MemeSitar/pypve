@@ -35,6 +35,7 @@ The project is being developed on Python 3.9.1. Install the required packages wi
     "value": "[API key]"
     }
     ```
+After that's set up, you can use this CLI app with the following syntax: `python main.py [command] [arguments] [options]`
 
 ### How to get a Proxmox API token?
 You can generate your own Proxmox API token in the datacenter view, in `Permissions => API Tokens`, where you press the `add` button at the top of the page. The token itself must be saved to a file as it is only shown once upon generation.
