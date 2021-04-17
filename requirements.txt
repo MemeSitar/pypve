@@ -1,0 +1,2 @@
+proxmoxer>=1.1.1
+typer>=0.3.2
