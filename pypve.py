@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from proxmoxer import ProxmoxAPI
 from enum import Enum
 from time import sleep, time
