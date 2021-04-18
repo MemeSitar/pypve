@@ -210,10 +210,18 @@ def shutdown(vmid: int):
     typer.echo(f"There is no VM with ID {vmid}!")
     
 @app.command()
-def lxc_create(
-        vmid: int = typer.Argument(...),
-        memory: int = typer.Option(512)):
+def lxc_create():
     """Will create an LXC container."""
+    node = proxmox.nodes(hosts["node"])
+    node.lxc.create(vmid=234,
+        ostemplate='local:vztmpl/ubuntu-18.04-standard_18.04.1-1_amd64.tar.gz',
+        hostname='ubuntu-18.04-test-container',
+        storage='local',
+        memory=512,
+        swap=512,
+        cores=1,
+        password='secret',
+        net0='name=eth0,bridge=vmbr0,ip=10.10.10.234/24,gw=10.10.10.1')
 
 if __name__ == "__main__":
     app()
