@@ -6,20 +6,20 @@ import json
 import typer
 from pathlib import Path
 
-# Finds the home directory, OS-agnostic.
-HOME = str(Path.home())
-
 # Required for typer
 app = typer.Typer()
 
 # Parts of the spinny animation
 ANIMATION = ['-', '\\', '|', '/']
 
+# Finds the config directory, OS-agnostic.
+CONFIG = f"{Path.home()}/.config/pypve"
+
 # Loads the hosts json. Currently put only one host in there.
-hosts = json.load(open(f"{HOME}/.pypve/hosts.json"))
+hosts = json.load(open(f"{CONFIG}/hosts.json"))
 
 # Loads the credentials and aliases proxmox
-credentials = json.load(open(f"{HOME}/.pypve/token.json")) 
+credentials = json.load(open(f"{CONFIG}/token.json")) 
 proxmox = ProxmoxAPI(
     hosts["host"],
     user=credentials["username"],
