@@ -38,15 +38,11 @@ def percent_used(maximum, used, accuracy=2):
 def is_same_id(vm_object, vmid):
     """Takes json object vm_object from cluster resources and a VM ID, and compares them."""
     vm = VirtualMachine(vm_object)
-    if str(vm.vmid) == str(vmid):
-        return True
-    else:
-        return False
+    return str(vm.vmid) == str(vmid)
 
 def get_vm_type(vm_object):
     """Makes an object and gets the VM type, just a bit easier to call a function."""
-    vm = VirtualMachine(vm_object)
-    return vm.type
+    return VirtualMachine(vm_object).type
 
 def wait_until_status_OK(upid, hostnode):
     """Takes Unique Process ID of a task, prints that the task is running until the task 
