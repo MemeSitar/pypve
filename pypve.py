@@ -4,6 +4,7 @@ from enum import Enum
 from time import sleep, time
 import json
 import typer
+from pathlib import Path
 
 # Required for typer
 app = typer.Typer()
@@ -11,11 +12,14 @@ app = typer.Typer()
 # Parts of the spinny animation
 ANIMATION = ['-', '\\', '|', '/']
 
+# Finds the config directory, OS-agnostic.
+CONFIG = f"{Path.home()}/.config/pypve"
+
 # Loads the hosts json. Currently put only one host in there.
-hosts = json.load(open("hosts.json"))
+hosts = json.load(open(f"{CONFIG}/hosts.json"))
 
 # Loads the credentials and aliases proxmox
-credentials = json.load(open("token.json")) 
+credentials = json.load(open(f"{CONFIG}/token.json")) 
 proxmox = ProxmoxAPI(
     hosts["host"],
     user=credentials["username"],

@@ -15,7 +15,7 @@ PyPVE currently supports:
 
     Gracefully stops the LXC or QEMU virtual machine with the specified VMID.
 ## How to use?
-The project is being developed on Python 3.9.1. Install the required packages with `pip install -r requirements.txt` and create the required JSON files in  the same folder as `main.py`:
+The project is being developed on Python 3.9.1. Install the required packages with `pip install -r requirements.txt` and create the required JSON files in your home directory in `.config/pypve/`:
 
 - `hosts.json`
 
