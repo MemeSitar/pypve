@@ -4,22 +4,22 @@ from enum import Enum
 from time import sleep, time
 import json
 import typer
-import os
+from pathlib import Path
+
+# Finds the home directory, OS-agnostic.
+HOME = str(Path.home())
 
 # Required for typer
 app = typer.Typer()
-
-# Getting the file's directory for configuration files
-DIRECTORY = os.path.dirname(__file__)
 
 # Parts of the spinny animation
 ANIMATION = ['-', '\\', '|', '/']
 
 # Loads the hosts json. Currently put only one host in there.
-hosts = json.load(open(f"{DIRECTORY}/hosts.json"))
+hosts = json.load(open(f"{HOME}/.pypve/hosts.json"))
 
 # Loads the credentials and aliases proxmox
-credentials = json.load(open(f"{DIRECTORY}/token.json")) 
+credentials = json.load(open(f"{HOME}/.pypve/token.json")) 
 proxmox = ProxmoxAPI(
     hosts["host"],
     user=credentials["username"],
