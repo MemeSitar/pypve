@@ -4,6 +4,7 @@ from enum import Enum
 from time import sleep, time
 import json
 import typer
+import csv
 from pathlib import Path
 
 # Required for typer
@@ -43,6 +44,10 @@ def is_same_id(vm_object, vmid):
 def get_vm_type(vm_object):
     """Makes an object and gets the VM type, just a bit easier to call a function."""
     return VirtualMachine(vm_object).type
+
+def get_vm_node(vm_object):
+    """Makes and object and gets its "node" parameter."""
+    return VirtualMachine(vm_object).node
 
 def wait_until_status_OK(upid, hostnode):
     """Takes Unique Process ID of a task, prints that the task is running until the task 
@@ -160,6 +165,10 @@ class HostNode:
         return message
 
 
+class NetworkInterfaces:
+    """Defines all the network interfaces"""
+
+
 class Resources(str, Enum):
     """Here just for fancy input checking."""
     vm = "vm"
@@ -208,7 +217,28 @@ def shutdown(vmid: int):
             vm.stop()
             raise typer.Exit()
     typer.echo(f"There is no VM with ID {vmid}!")
-    
+
+@app.command()
+def net_info(vmid: int):
+    """Prints the IP addresses of interfaces of the specified VM."""
+    # LXC has network info in "nodes/{node}/lxc/{vmid}/config" in the net part of the return
+    # QEMU has network info in "nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
+    for res in proxmox.cluster.resources.get(type="vm"):
+        vm = VirtualMachine(res)
+        if vm.vmid == vmid:
+            node = proxmox.nodes(vm.node)
+            if vm.type == "qemu":
+                message = node.qemu(vmid).agent.get("network-get-interfaces")
+            if vm.type == "lxc":
+                lxc_config = node.lxc(vmid).get("config")
+                lxc_net_info = lxc_config["net0"]
+                net_info_split = lxc_net_info.split(",")
+                for value in net_info_split:
+                    if "ip" in value:
+                        typer.echo(value)
+                message = lxc_net_info
+            typer.echo(message)
+
 @app.command()
 def lxc_create(
         vmid: int = typer.Argument(...),
